@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Image from "next/image"
-import { Facebook, Instagram, Twitter, Youtube, ChevronDown, Play, Pause, SkipForward, SkipBack, Volume2, PinIcon, Send, Music2, Phone, Mail, ExternalLink, ThumbsUp } from 'lucide-react'
+import { Facebook, Instagram, Twitter, Youtube, ChevronDown, Play, Pause, SkipForward, SkipBack, Volume2, PinIcon, Send, Music2, Phone, Mail, ExternalLink, ThumbsUp, Menu } from 'lucide-react'
 import { motion, AnimatePresence } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { Card, CardContent } from "@/components/ui/card"
@@ -10,6 +10,11 @@ import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 
 const carouselImages = [
   "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/2-mLQ5FNh5HS1VYghnGaMKLmn7OskiUz.png",
@@ -166,7 +171,7 @@ const FacebookPreview = () => {
   )
 }
 
-export function BlockPage() {
+export function BlockPageComponent() {
   const [currentSlide, setCurrentSlide] = React.useState(0)
   const [bioRef, bioInView] = useInView({ threshold: 0.1, triggerOnce: true })
   const [videosRef, videosInView] = useInView({ threshold: 0.1, triggerOnce: true })
@@ -193,28 +198,27 @@ export function BlockPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       <header className="fixed top-0 z-50 w-full">
-        <motion.div 
+        <motion.div
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="container mx-auto flex h-24 items-center justify-between px-8"
-        >
+          className="container mx-auto flex h-16 md:h-24 items-center justify-between px-4 md:px-8">
           <div className="flex items-center gap-4">
-            <Image 
+            <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ag%20logo%20(1)-D5lsWa8nAem5EskQ2XExyxoobQFNwE.png"
               alt="Arun Gaikwad Logo"
-              width={80}
-              height={80}
-              className="h-20 w-auto"
+              width={60}
+              height={60}
+              className="h-12 w-auto md:h-20"
             />
           </div>
-          
+
           <nav className="hidden md:flex flex-1 px-8">
-            <ul className="flex justify-center space-x-12 text-sm uppercase tracking-wider">
+            <ul className="flex justify-center space-x-6 md:space-x-12 text-sm uppercase tracking-wider">
               {navItems.map((item) => (
                 <li key={item.href}>
-                  <button 
-                    onClick={() =>scrollToSection(item.href.slice(1))} 
+                  <button
+                    onClick={() => scrollToSection(item.href.slice(1))}
                     className="hover:text-amber-500 transition-colors"
                   >
                     {item.label}
@@ -231,7 +235,7 @@ export function BlockPage() {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/80 hover:text-amber-500 transition-colors"
+                className="text-white/80 hover:text-amber-500 transition-colors hidden md:inline-block"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label={label}
@@ -239,6 +243,41 @@ export function BlockPage() {
                 <Icon className="h-5 w-5" />
               </motion.a>
             ))}
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                <nav className="flex flex-col gap-4">
+                  {navItems.map((item) => (
+                    <button
+                      key={item.href}
+                      onClick={() => scrollToSection(item.href.slice(1))}
+                      className="text-left text-lg font-medium hover:text-amber-500 transition-colors"
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </nav>
+                <div className="mt-8 flex gap-4">
+                  {socialLinks.map(({ Icon, href, label }) => (
+                    <a
+                      key={href}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/80 hover:text-amber-500 transition-colors"
+                      aria-label={label}
+                    >
+                      <Icon className="h-6 w-6" />
+                    </a>
+                  ))}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </motion.div>
       </header>
@@ -264,7 +303,7 @@ export function BlockPage() {
               />
             </motion.div>
           </AnimatePresence>
-          
+
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide}
@@ -272,10 +311,10 @@ export function BlockPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className={`absolute inset-0 flex flex-col items-center justify-center z-20 ${currentSlide % 2 === 0 ? 'md:items-start md:pl-16' : 'md:items-end md:pr-16'}`}
+              className={`absolute inset-0 flex flex-col items-center justify-center z-20 px-4 ${currentSlide % 2 === 0 ? 'md:items-start md:pl-16' : 'md:items-end md:pr-16'}`}
             >
               <motion.h1
-                className="text-4xl md:text-6xl font-bold text-center mb-4 font-serif"
+                className="text-3xl md:text-6xl font-bold text-center mb-4 font-serif"
                 style={{
                   textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
                   fontFamily: "'Playfair Display', serif",
@@ -284,13 +323,13 @@ export function BlockPage() {
                 Arun Gaikwad
               </motion.h1>
               <motion.h2
-                className="text-xl md:text-2xl text-center text-amber-500 font-semibold px-4 py-2 bg-black/50 rounded"
+                className="text-lg md:text-2xl text-center text-amber-500 font-semibold px-4 py-2 bg-black/50 rounded"
               >
                 TABLA VADAK & MUSICIAN PERCUSSIONIST
               </motion.h2>
             </motion.div>
           </AnimatePresence>
-          
+
           <motion.button
             onClick={() => scrollToSection('biography')}
             className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 text-center"
@@ -308,28 +347,28 @@ export function BlockPage() {
           </motion.button>
         </section>
 
-        <section id="biography" className="relative min-h-screen bg-gradient-to-b from-black via-zinc-900 to-black py-24">
-          <motion.div 
+        <section id="biography" className="relative min-h-screen bg-gradient-to-b from-black via-zinc-900 to-black py-16 md:py-24">
+          <motion.div
             ref={bioRef}
-            className="container mx-auto px-8"
+            className="container mx-auto px-4 md:px-8"
             initial={{ opacity: 0, y: 50 }}
             animate={bioInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl font-serif text-center mb-16">Biography</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 items-start">
-              <div className="md:col-span-2 space-y-6 text-lg text-zinc-300">
+            <h2 className="text-3xl md:text-4xl font-serif text-center mb-8 md:mb-16">Biography</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16 items-start">
+              <div className="md:col-span-2 space-y-4 md:space-y-6 text-base md:text-lg text-zinc-300">
                 <p>
                   Arun Gaikwad, born on 12th August 1982 in a Maharashtrian family in Mumbai, India, is a renowned semi-classical musician percussionist. His journey in music began amidst personal hardships, including the loss of his father at a young age, which forced him to leave his studies and start working to support his family.
                 </p>
                 <p>
-                  At the age of 13, Arun's life took a transformative turn when a neighbor introduced him to the tabla. Despite financial constraints, his mother and aunt managed to save enough to buy him his first tabla set. This marked the beginning of Arun's passionate pursuit of music.
+                  {`At the age of 13, Arun's life took a transformative turn when a neighbor introduced him to the tabla. Despite financial constraints, his mother and aunt managed to save enough to buy him his first tabla set. This marked the beginning of Arun's passionate pursuit of music`}.
                 </p>
                 <p>
                   Dedicating 8-12 hours daily to rigorous practice, Arun honed his skills and officially launched his career. He started performing bhajans, santwani, and dairo shows across India, quickly gaining recognition in Gujarat and Mumbai. His talent caught the attention of well-known artists and organizers, including Bhajanik Laxman Barot, Kirtidaan Gadhvi, Osman Mir, and Tejdaan Gadhvi.
                 </p>
                 <p>
-                  Arun's international debut came in 2008 with a performance in Malaysia, marking the beginning of his global recognition. His expertise extends beyond the tabla to include dholak, dhol, and various other percussion instruments. His unique style, blending traditional techniques with contemporary flair, has earned him acclaim in both classical and modern music circles.
+                  {` Arun's international debut came in 2008 with a performance in Malaysia, marking the beginning of his global recognition. His expertise extends beyond the tabla to include dholak, dhol, and various other percussion instruments. His unique style, blending traditional techniques with contemporary flair, has earned him acclaim in both classical and modern music circles.`}
                 </p>
                 <p>
                   In 2011, Arun made his first trip to the United States, performing at Navratri and Diwali shows. His captivating performances led to repeat invitations in 2012, 2015, 2017, and 2018. Arun has also expanded his repertoire to include Bollywood nights, showcasing his versatility as a performer.
@@ -338,11 +377,11 @@ export function BlockPage() {
                   Looking to the future, Arun aspires to make his mark in Bollywood, believing he can contribute memorable music and beats to the industry. He is currently working on semi-classical music with tabla cover songs, promising exciting new content for his fans.
                 </p>
                 <p>
-                  Arun Gaikwad's journey from humble beginnings to international acclaim is a testament to his talent, perseverance, and dedication to his craft. He remains grateful for the opportunities that have allowed him to support his family and pursue his passion for music.
+                  {`Arun Gaikwad's journey from humble beginnings to international acclaim is a testament to his talent, perseverance, and dedication to his craft. He remains grateful for the opportunities that have allowed him to support his family and pursue his passion for music.`}
                 </p>
               </div>
-              <div className="relative w-full max-w-md mx-auto">
-                <div 
+              <div className="relative w-full max-w-md mx-auto md:mx-0">
+                <div
                   className="absolute inset-0 -z-10 bg-gradient-to-br from-purple-900 via-amber-500/20 to-amber-700/20 opacity-50 blur-3xl transform scale-110"
                   aria-hidden="true"
                 />
@@ -356,7 +395,7 @@ export function BlockPage() {
                   />
                 </div>
                 <div className="mt-8 text-center">
-                  <h3 className="text-2xl font-semibold mb-2">Arun Gaikwad</h3>
+                  <h3 className="text-xl md:text-2xl font-semibold mb-2">Arun Gaikwad</h3>
                   <p className="text-amber-500">Tabla Vadak & Musician Percussionist</p>
                 </div>
               </div>
@@ -364,7 +403,7 @@ export function BlockPage() {
           </motion.div>
         </section>
 
-        <section id="videos" className="relative bg-gradient-to-b from-zinc-900 to-black py-24">
+        <section id="videos" className="relative bg-gradient-to-b from-zinc-900 to-black py-16 md:py-24">
           <motion.div
             ref={videosRef}
             className="container mx-auto px-4 sm:px-6 lg:px-8"
@@ -372,8 +411,8 @@ export function BlockPage() {
             animate={videosInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl font-serif text-center mb-16">Popular Videos</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <h2 className="text-3xl md:text-4xl font-serif text-center mb-8 md:mb-16">Popular Videos</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {youtubeVideos.map((video, index) => (
                 <motion.a
                   key={video.id}
@@ -393,10 +432,10 @@ export function BlockPage() {
                       className="object-cover"
                     />
                     <div className="absolute inset-0 bg-black bg-opacity-40 transition-opacity duration-300 group-hover:bg-opacity-30 flex items-center justify-center">
-                      <Play className="w-16 h-16 text-white opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
+                      <Play className="w-12 h-12 md:w-16 md:h-16 text-white opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
                   </div>
-                  <h3 className="mt-4 text-lg font-semibold text-zinc-100 group-hover:text-amber-500 transition-colors duration-300">{video.title}</h3>
+                  <h3 className="mt-4 text-base md:text-lg font-semibold text-zinc-100 group-hover:text-amber-500 transition-colors duration-300">{video.title}</h3>
                 </motion.a>
               ))}
             </div>
@@ -414,7 +453,7 @@ export function BlockPage() {
           </motion.div>
         </section>
 
-        <section id="music" className="relative bg-gradient-to-b from-zinc-900 to-black py-24">
+        <section id="music" className="relative bg-gradient-to-b from-zinc-900 to-black py-16 md:py-24">
           <motion.div
             ref={musicRef}
             className="container mx-auto px-4 sm:px-6 lg:px-8"
@@ -422,9 +461,9 @@ export function BlockPage() {
             animate={musicInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8 }}
           >
-            <div className="mb-24">
-              <h2 className="text-4xl font-serif text-center mb-16">Listen On</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8">
+            <div className="mb-16 md:mb-24">
+              <h2 className="text-3xl md:text-4xl font-serif text-center mb-8 md:mb-16">Listen On</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8">
                 {platforms.map((platform, index) => (
                   <motion.a
                     key={platform.name}
@@ -437,31 +476,30 @@ export function BlockPage() {
                     animate={musicInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                   >
-                    <div className={`relative w-16 h-16 rounded-full ${platform.color} p-2 shadow-lg group-hover:shadow-xl transition-shadow flex items-center justify-center`}>
+                    <div className={`relative w-12 h-12 md:w-16 md:h-16 rounded-full ${platform.color} p-2 shadow-lg group-hover:shadow-xl transition-shadow flex items-center justify-center`}>
                       <Image
                         src={platform.icon}
                         alt={platform.name}
                         width={48}
                         height={48}
-                        className="w-10 h-10 object-contain"
+                        className="w-8 h-8 md:w-10 md:h-10 object-contain"
                       />
                     </div>
-                    <span className="text-sm font-medium text-zinc-300 text-center">{platform.name}</span>
+                    <span className="text-xs md:text-sm font-medium text-zinc-300 text-center">{platform.name}</span>
                   </motion.a>
                 ))}
               </div>
             </div>
 
             <div>
-              <h2 className="text-4xl font-serif text-center mb-16">Top Tracks</h2>
+              <h2 className="text-3xl md:text-4xl font-serif text-center mb-8 md:mb-16">Top Tracks</h2>
               <Card className="bg-zinc-900/50 border-zinc-800 shadow-xl">
-                <CardContent className="p-6">
+                <CardContent className="p-4 md:p-6">
                   {topTracks.map((track, index) => (
                     <motion.div
                       key={track.title}
-                      className={`flex items-center justify-between p-4 rounded-lg mb-2 ${
-                        currentTrack === index ? 'bg-amber-500/10' : 'hover:bg-zinc-800/50'
-                      } transition-colors cursor-pointer`}
+                      className={`flex items-center justify-between p-3 md:p-4 rounded-lg mb-2 ${currentTrack === index ? 'bg-amber-500/10' : 'hover:bg-zinc-800/50'
+                        } transition-colors cursor-pointer`}
                       onClick={() => {
                         setCurrentTrack(index)
                         setIsPlaying(true)
@@ -472,22 +510,22 @@ export function BlockPage() {
                     >
                       <div className="flex items-center gap-4">
                         <span className="text-zinc-400 w-6">{index + 1}</span>
-                        <span className={currentTrack === index ? 'text-amber-500' : 'text-white'}>
+                        <span className={`text-sm md:text-base ${currentTrack === index ? 'text-amber-500' : 'text-white'}`}>
                           {track.title}
                         </span>
                       </div>
-                      <span className="text-zinc-400">{track.duration}</span>
+                      <span className="text-xs md:text-sm text-zinc-400">{track.duration}</span>
                     </motion.div>
                   ))}
                 </CardContent>
 
-                <div className="border-t border-zinc-800 p-6">
+                <div className="border-t border-zinc-800 p-4 md:p-6">
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-400">
+                      <span className="text-xs md:text-sm text-zinc-400">
                         {topTracks[currentTrack].title}
                       </span>
-                      <span className="text-sm text-zinc-400">
+                      <span className="text-xs md:text-sm text-zinc-400">
                         {topTracks[currentTrack].duration}
                       </span>
                     </div>
@@ -497,7 +535,7 @@ export function BlockPage() {
                         variant="ghost"
                         onClick={() => setCurrentTrack((prev) => (prev - 1 + topTracks.length) % topTracks.length)}
                       >
-                        <SkipBack className="h-5 w-5" />
+                        <SkipBack className="h-4 w-4 md:h-5 md:w-5" />
                         <span className="sr-only">Previous</span>
                       </Button>
                       <Button
@@ -506,9 +544,9 @@ export function BlockPage() {
                         onClick={() => setIsPlaying(!isPlaying)}
                       >
                         {isPlaying ? (
-                          <Pause className="h-5 w-5" />
+                          <Pause className="h-4 w-4 md:h-5 md:w-5" />
                         ) : (
-                          <Play className="h-5 w-5" />
+                          <Play className="h-4 w-4 md:h-5 md:w-5" />
                         )}
                         <span className="sr-only">{isPlaying ? 'Pause' : 'Play'}</span>
                       </Button>
@@ -517,7 +555,7 @@ export function BlockPage() {
                         variant="ghost"
                         onClick={() => setCurrentTrack((prev) => (prev + 1) % topTracks.length)}
                       >
-                        <SkipForward className="h-5 w-5" />
+                        <SkipForward className="h-4 w-4 md:h-5 md:w-5" />
                         <span className="sr-only">Next</span>
                       </Button>
                     </div>
@@ -529,14 +567,14 @@ export function BlockPage() {
                       />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-zinc-400">0:00</span>
+                      <span className="text-xs md:text-sm text-zinc-400">0:00</span>
                       <div className="flex items-center gap-2">
-                        <Volume2 className="h-4 w-4 text-zinc-400" />
+                        <Volume2 className="h-3 w-3 md:h-4 md:w-4 text-zinc-400" />
                         <Slider
                           defaultValue={[100]}
                           max={100}
                           step={1}
-                          className="w-20"
+                          className="w-16 md:w-20"
                         />
                       </div>
                     </div>
@@ -547,7 +585,7 @@ export function BlockPage() {
           </motion.div>
         </section>
 
-        <section id="press" className="relative bg-gradient-to-b from-zinc-900 to-black py-24">
+        <section id="press" className="relative bg-gradient-to-b from-zinc-900 to-black py-16 md:py-24">
           <motion.div
             ref={pressRef}
             className="container mx-auto px-4 sm:px-6 lg:px-8"
@@ -555,8 +593,8 @@ export function BlockPage() {
             animate={pressInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl font-serif text-center mb-16">Press Releases</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <h2 className="text-3xl md:text-4xl font-serif text-center mb-8 md:mb-16">Press Releases</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
               {pressReleases.map((release, index) => (
                 <motion.a
                   key={release.title}
@@ -578,8 +616,8 @@ export function BlockPage() {
                       />
                     </div>
                     <div className="p-4">
-                      <h3 className="text-lg font-semibold mb-2 group-hover:text-amber-500 transition-colors duration-300">{release.title}</h3>
-                      <p className="text-sm text-zinc-400">{release.source}</p>
+                      <h3 className="text-base md:text-lg font-semibold mb-2 group-hover:text-amber-500 transition-colors duration-300">{release.title}</h3>
+                      <p className="text-xs md:text-sm text-zinc-400">{release.source}</p>
                     </div>
                   </div>
                 </motion.a>
@@ -588,7 +626,7 @@ export function BlockPage() {
           </motion.div>
         </section>
 
-        <section id="contact" className="relative bg-gradient-to-b from-black to-zinc-900 py-24">
+        <section id="contact" className="relative bg-gradient-to-b from-black to-zinc-900 py-16 md:py-24">
           <motion.div
             ref={contactRef}
             className="container mx-auto px-4 sm:px-6 lg:px-8"
@@ -596,35 +634,35 @@ export function BlockPage() {
             animate={contactInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl font-serif text-center mb-8">JOIN MY MAILING LIST</h2>
-            <h3 className="text-2xl font-serif text-center mb-16">BOOKING & CONTACT</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+            <h2 className="text-3xl md:text-4xl font-serif text-center mb-4 md:mb-8">JOIN MY MAILING LIST</h2>
+            <h3 className="text-xl md:text-2xl font-serif text-center mb-8 md:mb-16">BOOKING & CONTACT</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
               <div>
-                <p className="mb-6">Get in touch for bookings, interviews & more!</p>
-                <p className="mb-6">Please send a detailed email with the nature of your inquiry, as well as any dates and locations associated.</p>
-                <div className="flex items-center gap-2 mb-4">
-                  <Mail className="h-5 w-5" />
-                  <a href="mailto:arungaikwad34@gmail.com" className="hover:text-amber-500 transition-colors">arungaikwad34@gmail.com</a>
+                <p className="mb-4 md:mb-6">Get in touch for bookings, interviews & more!</p>
+                <p className="mb-4 md:mb-6">Please send a detailed email with the nature of your inquiry, as well as any dates and locations associated.</p>
+                <div className="flex items-center gap-2 mb-3 md:mb-4">
+                  <Mail className="h-4 w-4 md:h-5 md:w-5" />
+                  <a href="mailto:arungaikwad34@gmail.com" className="text-sm md:text-base hover:text-amber-500 transition-colors">arungaikwad34@gmail.com</a>
                 </div>
-                <div className="flex items-center gap-2 mb-4">
-                  <Phone className="h-5 w-5" />
-                  <a href="tel:+919967497492" className="hover:text-amber-500 transition-colors">+91 9967497492</a>
+                <div className="flex items-center gap-2 mb-3 md:mb-4">
+                  <Phone className="h-4 w-4 md:h-5 md:w-5" />
+                  <a href="tel:+919967497492" className="text-sm md:text-base hover:text-amber-500 transition-colors">+91 9967497492</a>
                 </div>
-                <div className="flex items-center gap-2 mb-8">
-                  <Phone className="h-5 w-5" />
-                  <a href="tel:+919821375215" className="hover:text-amber-500 transition-colors">+91 9821375215</a>
+                <div className="flex items-center gap-2 mb-6 md:mb-8">
+                  <Phone className="h-4 w-4 md:h-5 md:w-5" />
+                  <a href="tel:+919821375215" className="text-sm md:text-base hover:text-amber-500 transition-colors">+91 9821375215</a>
                 </div>
                 <a
                   href="https://api.whatsapp.com/send/?phone=919967497492&text&type=phone_number&app_absent=0"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                  className="inline-flex items-center px-4 py-2 md:px-6 md:py-3 border border-transparent text-sm md:text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 >
                   Enquiry on WhatsApp
                 </a>
               </div>
-              <form className="space-y-6">
-                <div className="grid grid-cols-2 gap-6">
+              <form className="space-y-4 md:space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                   <Input type="text" placeholder="First Name" className="bg-zinc-800 border-zinc-700" />
                   <Input type="text" placeholder="Last Name" className="bg-zinc-800 border-zinc-700" />
                 </div>
@@ -638,20 +676,20 @@ export function BlockPage() {
         </section>
       </main>
 
-      <footer className="bg-zinc-900 text-white py-12">
+      <footer className="bg-zinc-900 text-white py-8 md:py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
-            <div className="flex items-center gap-8">
+            <div className="flex flex-col md:flex-row items-center gap-8">
               <FacebookPreview />
-              <Image 
+              <Image
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ag%20logo%20(1)-D5lsWa8nAem5EskQ2XExyxoobQFNwE.png"
                 alt="Arun Gaikwad Logo"
-                width={100}
-                height={100}
-                className="h-24 w-auto"
+                width={80}
+                height={80}
+                className="h-20 w-auto"
               />
             </div>
-            
+
             <div className="flex flex-col items-center lg:items-end gap-6">
               <div className="flex gap-4">
                 {socialLinks.map(({ Icon, href, label }) => (
@@ -663,18 +701,18 @@ export function BlockPage() {
                     className="text-white/80 hover:text-amber-500 transition-colors"
                     aria-label={label}
                   >
-                    <Icon className="h-6 w-6" />
+                    <Icon className="h-5 w-5 md:h-6 md:w-6" />
                   </a>
                 ))}
               </div>
-              
+
               <nav>
-                <ul className="flex flex-wrap justify-center gap-6">
+                <ul className="flex flex-wrap justify-center gap-4 md:gap-6">
                   {navItems.map((item) => (
                     <li key={item.href}>
-                      <button 
+                      <button
                         onClick={() => scrollToSection(item.href.slice(1))}
-                        className="text-sm hover:text-amber-500 transition-colors"
+                        className="text-xs md:text-sm hover:text-amber-500 transition-colors"
                       >
                         {item.label}
                       </button>
@@ -682,9 +720,9 @@ export function BlockPage() {
                   ))}
                 </ul>
               </nav>
-              
+
               <div className="text-center lg:text-right">
-                <p className="text-sm text-zinc-400">
+                <p className="text-xs md:text-sm text-zinc-400">
                   © {new Date().getFullYear()} Arun Gaikwad. All rights reserved.
                 </p>
                 <p className="text-xs text-zinc-500 mt-1">
